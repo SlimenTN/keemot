@@ -66,7 +66,13 @@ class DatabaseHandler{
   // Read
   Future<List> read() async{
     var dbClient = await db;
-    var res = await dbClient.rawQuery('SELECT * FROM $_table');
+    var res = await dbClient.rawQuery('SELECT * FROM $_table ORDER BY id DESC');
     return res.toList();// we can get rid of .toList() function
+  }
+
+  Future<List> readComingEvents(int days) async{
+    var dbClient = await db;
+    var res = await dbClient.rawQuery("SELECT * from $_table WHERE DATE($_columnDate) BETWEEN DATE('now') AND DATE('now', '+$days day') ORDER BY DATE($_columnDate) ASC");
+    return res.toList();
   }
 }

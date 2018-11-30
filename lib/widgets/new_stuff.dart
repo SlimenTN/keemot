@@ -147,14 +147,18 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
       body: ListView(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                'What should I remind you with ?',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
+          Container(
+            color: Colors.teal,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Text(
+                  'What should I remind you with ?',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
                 ),
               ),
             ),
@@ -173,11 +177,19 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: FlatButton(
-                child: Text(
-                  (_selectedDate == null) ? 'Select a Date' : this.formatDate.format(_selectedDate),
-                  style: TextStyle(
-                    fontSize: 30.0
+              child: OutlineButton(                
+                borderSide: BorderSide(
+                  color: Colors.blueAccent,
+                ),
+                color: Colors.blueAccent,
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    (_selectedDate == null) ? 'Select a Date' : this.formatDate.format(_selectedDate),
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      color: Colors.blueAccent
+                    ),
                   ),
                 ),
                 onPressed: () {
@@ -187,14 +199,18 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             )
           ),
 
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                'Reiteration',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
+          Container(
+            color: Colors.teal,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Text(
+                  'Reiteration',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
                 ),
               ),
             ),
@@ -242,14 +258,18 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             ),
           ),
 
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                'When should I remind you ?',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
+          Container(
+            color: Colors.teal,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Text(
+                  'When should I remind you ?',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
                 ),
               ),
             ),
@@ -299,11 +319,18 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
           ),
 
           Center(
-            child: FlatButton(
-              child: Text(
-                (_selectedTime == null) ? 'Select a Time' : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
-                style: TextStyle(
-                  fontSize: 30.0
+            child: OutlineButton(
+              borderSide: BorderSide(
+                color: Colors.blueAccent,
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  (_selectedTime == null) ? 'Select a Time' : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.blueAccent
+                  ),
                 ),
               ),
               onPressed: (){
