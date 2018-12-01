@@ -136,7 +136,6 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New Stuff'),
-        backgroundColor: Colors.blueGrey,
         actions: <Widget>[
           FlatButton(
             child: Icon(Icons.save, color: Colors.white),

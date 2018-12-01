@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/model.dart';
 import './details_task_widget.dart';
 import '../database/db_handler.dart';
+import './new_stuff.dart';
 
 class AllStuffWidget extends StatefulWidget {
   @override
@@ -31,6 +32,43 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
     });
   }
 
+  void _deleteTask(int id) async{
+    await dbh.delete(id);
+    _loadTasks();
+  }
+
+  void _confirmDelete(int id){
+    var alert = AlertDialog(
+      title: Text('Delete Task'),
+      content: Text('Are you sure you want to delete this task ?'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        FlatButton(
+          child: Text('Yes'),
+          onPressed: () {
+            Navigator.pop(context);
+            _deleteTask(id);
+          },
+        )
+      ],
+    );
+
+    showDialog(context: context, builder: (BuildContext context) => alert);
+  }
+
+  void _addNewStuff(BuildContext context) async{
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => NewStuffWidget()
+      )
+    );
+
+    _loadTasks();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -38,7 +76,13 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
       appBar: AppBar(
         title: Text('List of stuff to do'),
       ),
-
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_alarm),
+        backgroundColor: Colors.lightBlue,
+        onPressed: (){
+          _addNewStuff(context);
+        },
+      ),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -47,7 +91,13 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
               child: ListView.builder(
                 itemCount: _tasks.length,
                 itemBuilder: (_, int index){
-                  return DetailTask(task: _tasks[index]); 
+                  Task task = _tasks[index];
+                  return DetailTask(
+                    task: task,
+                    onDelete: (){
+                      _confirmDelete(task.id);
+                    },
+                  ); 
                 },
               ),
             )

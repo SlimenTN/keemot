@@ -65,6 +65,7 @@ class Task{
   }
 
   Task.map(Map object){
+    this._id = object['id'];
     this._title = object['title'];
     this._date = formatDate.parse(object['date']);
     this._time = stringToTime(object['time']);

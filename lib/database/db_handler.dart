@@ -75,4 +75,15 @@ class DatabaseHandler{
     var res = await dbClient.rawQuery("SELECT * from $_table WHERE DATE($_columnDate) BETWEEN DATE('now') AND DATE('now', '+$days day') ORDER BY DATE($_columnDate) ASC");
     return res.toList();
   }
+
+  Future<int> delete(int id) async{
+    var dbClient = await db;
+    var res = await dbClient.delete(
+      _table,
+      where: '$_columnId = ?',
+      whereArgs: [id]
+    );
+
+    return res;
+  }
 }

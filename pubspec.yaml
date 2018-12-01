@@ -23,6 +23,7 @@ dependencies:
   intl: "^0.15.4"
   numberpicker: ^0.1.7
   sqflite: ^0.12.2+1
+  flutter_local_notifications: ^0.4.2
 
 dev_dependencies:
   flutter_test:
