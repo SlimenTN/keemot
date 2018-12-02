@@ -5,9 +5,19 @@ import '../database/model.dart';
 class DetailTask extends StatelessWidget {
   final Task task;
   final Function onDelete;
+  final Function onLongPress;
   
 
-  const DetailTask({Key key, @required this.task, this.onDelete}): super(key: key);
+  const DetailTask({Key key, @required this.task, this.onDelete, this.onLongPress}): super(key: key);
+
+  void _showToast(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Long press to edit the task'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +47,12 @@ class DetailTask extends StatelessWidget {
             onDelete();
           },
         ),
+        onTap: (){
+          _showToast(context);
+        },
+        onLongPress: (){
+          this.onLongPress();
+        },
       ),
     );
   }

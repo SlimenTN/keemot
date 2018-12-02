@@ -5,6 +5,9 @@ import '../database/model.dart';
 import '../database/db_handler.dart';
 
 class NewStuffWidget extends StatefulWidget {
+  final Task task;
+  const NewStuffWidget({Key key, @required this.task}) : super(key: key);
+  
   @override
   _NewStuffWidgetState createState() => _NewStuffWidgetState();
 }
@@ -13,13 +16,26 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
   final formatDate = DateFormat('dd/MM/yyyy');
   final TextEditingController _controller = TextEditingController();
   final dbh = DatabaseHandler.internal();
+  
 
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
-  String _reiterationGroup = 'MONTH';
-  String _notificationGroup = 'DAY'; 
-  num _reiterationCount = 1;
-  num _notificationCount = 1;
+  String _reiterationGroup;
+  String _notificationGroup; 
+  num _reiterationCount;
+  num _notificationCount;
+
+  @override
+  void initState(){
+    super.initState();
+    _controller.text = widget.task.title;
+    _reiterationGroup = widget.task.reiterationTarget;
+    _notificationGroup = widget.task.notificationTarget;
+    _selectedDate = widget.task.date;
+    _selectedTime = widget.task.time;
+    _reiterationCount = widget.task.reiteration;
+    _notificationCount = widget.task.notification;
+  }
 
   _onReiterationRadioChanged(String value){
     setState(() {
@@ -34,11 +50,13 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
   }
 
   void _selectDate(BuildContext context) async{
+    int firstYear = DateTime.now().year;
+    int finalYear = firstYear + 10;
     final DateTime dt = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2016),
-      lastDate: DateTime(2020)
+      firstDate: DateTime(firstYear),
+      lastDate: DateTime(finalYear)
     );
 
     if(dt != null){
@@ -74,9 +92,10 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
     });
   }
 
-  _saveData() async{
+  _saveData(Task task) async{
     if(formIsValid()){
-      Task task = Task(
+      int id = task.id;
+      task = Task(
         _controller.text, 
         _selectedDate, 
         _selectedTime, 
@@ -84,7 +103,10 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
         _reiterationGroup, 
         _notificationCount, 
         _notificationGroup);
-      await dbh.create(task);
+      if(id == null)
+        await dbh.create(task);
+      else
+        await dbh.edit(task, id);
 
       Navigator.pop(context);
     }
@@ -113,7 +135,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
-
+  
   @override
   Widget build(BuildContext context) {
 
@@ -135,11 +157,15 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Stuff'),
+        title: Text(
+          (widget.task.id == null) ? 'New Stuff' : '${widget.task.title}'
+        ),
         actions: <Widget>[
           FlatButton(
             child: Icon(Icons.save, color: Colors.white),
-            onPressed: _saveData,
+            onPressed: (){
+              _saveData(widget.task);
+            },
           ),
         ],
       ),

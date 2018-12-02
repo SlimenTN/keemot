@@ -64,61 +64,118 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
     List list = await dbh.readComingEvents(numberOfDaysToDisplayComingStuff);
     list.forEach((dynamic object){
       Task task = Task.map(object);
-      setState(() {
-        _comingTasks.add(task);      
-      });
+      _comingTasks.add(task); 
     });
+    setState(() {});
   }
 
   void _addNewStuff(BuildContext context) async{
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => NewStuffWidget()
+        builder: (_) => NewStuffWidget(task: Task.empty(),)
       )
     );
 
     _loadComingTasks();
   }
 
-  void _goToAllTasksScreen(BuildContext context){
-    Navigator.of(context).push(
+  void _goToAllTasksScreen(BuildContext context) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => AllStuffWidget()
       )
     );
+    _loadComingTasks();
+  }
+
+  Widget _buildList(){
+    if(_comingTasks.length == 0){
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                child: Text(
+                  'You are free for the next 7 days',
+                  style: TextStyle(
+                    fontSize: 30.0
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
+              ),
+              Container(
+                // padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
+                width: 200.0,
+                height: 200.0,
+                child: Image.asset('images/freedom.png'),
+              )
+            ],
+          )
+        ),
+      );
+    }else{
+      return Flexible(
+        child: ListView.builder(
+          itemCount: _comingTasks.length,
+          itemBuilder: (_, int index){
+            if(_comingTasks.length == 0){
+              print('list is empty');
+              return Container(
+                child: Text('List is empty'),
+              );
+            }else{
+              return ComingTask(task: _comingTasks[index]);
+            }
+            
+          },
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Keemot'),
         actions: <Widget>[
-          FlatButton(
-            child: Icon(Icons.refresh, color: Colors.white),
-            onPressed: _loadComingTasks,
-          ),
+          // FlatButton(
+          //   child: Icon(Icons.refresh, color: Colors.white),
+          //   onPressed: _loadComingTasks,
+          // ),
           // FlatButton(
           //   child: Icon(Icons.notifications),
           //   onPressed: _showNotificationWithDefaultSound,
           // ),
-          PopupMenuButton<String>(
-            itemBuilder: (BuildContext context){
-              return <PopupMenuItem<String>>[
-                PopupMenuItem<String>(
-                  child: Text('Parameters'),
-                  value: 'settings',
-                ),
-                PopupMenuItem<String>(
-                  child: Text('All stuff'),
-                  value: 'list_stuff'
-                ),
-              ];
+          FlatButton(
+            child: Icon(Icons.list, color: Colors.white),
+            onPressed: (){
+              _goToAllTasksScreen(context);
             },
-            onSelected: (value){
-              if(value == 'list_stuff') _goToAllTasksScreen(context);
-            },
-          )
+          ),
+          // PopupMenuButton<String>(
+          //   itemBuilder: (BuildContext context){
+          //     return <PopupMenuItem<String>>[
+          //       PopupMenuItem<String>(
+          //         child: Text('Parameters'),
+          //         value: 'settings',
+          //       ),
+          //       PopupMenuItem<String>(
+          //         child: Text('All stuff'),
+          //         value: 'list_stuff'
+          //       ),
+          //     ];
+          //   },
+          //   onSelected: (value){
+          //     if(value == 'list_stuff') _goToAllTasksScreen(context);
+          //   },
+          // )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -134,22 +191,15 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
             Padding(
               padding: EdgeInsets.all(20.0),
                 child: Text(
-                'Coming stuff to do',
+                'COMING STUFF TO DO',
                 style: TextStyle(
-                  fontSize: 40.0,
+                  fontSize: 25.0,
                   color: Colors.blueAccent
                 ),
               ),
             ),
 
-            Flexible(
-              child: ListView.builder(
-                itemCount: _comingTasks.length,
-                itemBuilder: (_, int index){
-                  return ComingTask(task: _comingTasks[index]);
-                },
-              ),
-            )
+            _buildList()
           ],
         ),
       ),

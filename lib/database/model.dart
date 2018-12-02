@@ -6,13 +6,13 @@ class Task{
   final formatDate = DateFormat('yyyy-MM-dd');
 
   int _id;
-  String _title;
+  String _title = '';
   DateTime _date;
   TimeOfDay _time;
-  num _reiteration;
-  String _reiterationTarget;
-  num _notification;
-  String _notificationTarget;
+  num _reiteration = 1;
+  String _reiterationTarget = 'MONTH';
+  num _notification = 1;
+  String _notificationTarget = 'DAY';
 
   Task(
     this._title,
@@ -23,6 +23,8 @@ class Task{
     this._notification,
     this._notificationTarget,
   );
+
+  Task.empty();
 
   int get id => _id;
 

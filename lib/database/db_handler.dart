@@ -63,6 +63,17 @@ class DatabaseHandler{
     return res;
   }
 
+  // Edit task
+  Future<int> edit(Task task, int id)async {
+    var dbClient = await db;
+    return await dbClient.update(
+      _table, 
+      task.toMap(),
+      where: '$_columnId = ?',
+      whereArgs: [id]
+    );
+  }
+
   // Read
   Future<List> read() async{
     var dbClient = await db;

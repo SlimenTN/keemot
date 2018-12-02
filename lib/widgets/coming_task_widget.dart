@@ -14,13 +14,16 @@ class ComingTask extends StatelessWidget {
     int remainingDays;
 
     Duration diff = task.date.difference(DateTime.now());
-    remainingDays = diff.inDays+1;
-    Color borderColor = remainingDays == 1 ? Colors.red : Colors.blueAccent;
-    Color backgroundColor = remainingDays == 1 ? Colors.red : Colors.white;
-    Color avatarColor = remainingDays == 1 ? Colors.white : Colors.blueGrey;
-    Color avatarTextColor = remainingDays == 1 ? Colors.red : Colors.white;
-    Color titleColor = remainingDays == 1 ? Colors.white : Colors.blueAccent;
-    Color subtitleColor = remainingDays == 1 ? Colors.white : Colors.grey;
+    // remainingDays = diff.inDays;
+    bool sameDay = (task.date.day == DateTime.now().day);
+    remainingDays = (sameDay) ? 0 : diff.inDays + 1;
+    print('remaining days: $remainingDays');
+    Color borderColor = remainingDays <= 1 ? Colors.red : Colors.blueAccent;
+    Color backgroundColor = remainingDays <= 1 ? Colors.red : Colors.white;
+    Color avatarColor = remainingDays <= 1 ? Colors.white : Colors.blueGrey;
+    Color avatarTextColor = remainingDays <= 1 ? Colors.red : Colors.white;
+    Color titleColor = remainingDays <= 1 ? Colors.white : Colors.blueAccent;
+    Color subtitleColor = remainingDays <= 1 ? Colors.white : Colors.grey;
 
 
     return Container(

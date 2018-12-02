@@ -62,10 +62,19 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
   void _addNewStuff(BuildContext context) async{
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => NewStuffWidget()
+        builder: (_) => NewStuffWidget(task: Task.empty())
       )
     );
 
+    _loadTasks();
+  }
+
+  void _editTask(Task task) async{
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => NewStuffWidget(task: task)
+      )
+    );
     _loadTasks();
   }
 
@@ -74,7 +83,7 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('List of stuff to do'),
+        title: Text('List of repeated tasks'),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_alarm),
@@ -96,6 +105,9 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
                     task: task,
                     onDelete: (){
                       _confirmDelete(task.id);
+                    },
+                    onLongPress: (){
+                      _editTask(task);
                     },
                   ); 
                 },
