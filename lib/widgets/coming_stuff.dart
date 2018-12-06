@@ -6,6 +6,7 @@ import '../database/db_handler.dart';
 import '../database/model.dart';
 import 'coming_task_widget.dart';
 import 'all_stuff.dart';
+import './test_screen.dart';
 
 class ComingStufWidget extends StatefulWidget {
   @override
@@ -82,7 +83,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
   void _goToAllTasksScreen(BuildContext context) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => AllStuffWidget()
+        builder: (_) => TestScreen()
       )
     );
     _loadComingTasks();
@@ -106,7 +107,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
               ),
               Container(
                 // padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
@@ -123,15 +124,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
         child: ListView.builder(
           itemCount: _comingTasks.length,
           itemBuilder: (_, int index){
-            if(_comingTasks.length == 0){
-              print('list is empty');
-              return Container(
-                child: Text('List is empty'),
-              );
-            }else{
-              return ComingTask(task: _comingTasks[index]);
-            }
-            
+            return ComingTask(task: _comingTasks[index]);            
           },
         ),
       );
