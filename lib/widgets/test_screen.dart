@@ -11,8 +11,13 @@ class TestScreen extends StatelessWidget {
 
       body: Center(
         child: Container(
+          height: 400.0,
           padding: EdgeInsets.all(50.0),
-          child: DateSelector(),
+          child: DateSelector(
+            onDateSelected: (Map month, int selectedDay){
+              print('you have selected the $selectedDay th of ${month['name']}');
+            },
+          ),
         )
       ),
     );
