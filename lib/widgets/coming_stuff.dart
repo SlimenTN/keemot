@@ -62,12 +62,50 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
 
   void _loadComingTasks() async{
     _comingTasks.clear();
-    List list = await dbh.readComingEvents(numberOfDaysToDisplayComingStuff);
+    // List list = await dbh.readComingEvents(numberOfDaysToDisplayComingStuff);
+    List list = await dbh.read();
     list.forEach((dynamic object){
       Task task = Task.map(object);
-      _comingTasks.add(task); 
+      if(task.reiterationTarget == 'MONTH'){
+        if(
+          taskWithinThisMonth(task) 
+          && taskWithinThisWeek(task)
+          ) _comingTasks.add(task);
+          
+      }else if(task.reiterationTarget == 'YEAR') {
+        if(
+          taskWithinThisYear(task) 
+          && DateTime.now().month == task.month 
+          && taskWithinThisWeek(task)
+          ) _comingTasks.add(task);
+      }
     });
     setState(() {});
+  }
+
+  // Check if the given task is within this month
+  // Equation: ((currentMonth + 12) - task.month) / task.reiteration)  ==> should be integer
+  bool taskWithinThisMonth(Task task){
+    int currentMonth = DateTime.now().month;
+    if(((currentMonth + 12) - task.month) % task.reiteration == 0) return true;
+    return false;
+  }
+
+  // Check if task within this week (7 days)
+  // Equation: task.day - currentDay ==> should be inferiour or equal to 7
+  bool taskWithinThisWeek(Task task){
+    int currentDay = DateTime.now().day;
+    int diff = currentDay - task.day;
+    if(diff>= 0 && diff <= numberOfDaysToDisplayComingStuff) return true;
+    return false;
+  }
+
+  // Check if task within this year for tasks that has reiteration over years
+  // Equation: (currentYear - task.date.year) / task.reiteration ==> should be integer
+  bool taskWithinThisYear(Task task){
+    int currentYear = DateTime.now().year;
+    if((currentYear - task.date.year) % task.reiteration == 0) return true;
+    return false;
   }
 
   void _addNewStuff(BuildContext context) async{
@@ -83,7 +121,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
   void _goToAllTasksScreen(BuildContext context) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => TestScreen()
+        builder: (_) => AllStuffWidget()
       )
     );
     _loadComingTasks();

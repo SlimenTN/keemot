@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../util/months.dart' as mu;
 
 class Task{
   final formatDate = DateFormat('yyyy-MM-dd');
@@ -8,6 +9,8 @@ class Task{
   int _id;
   String _title = '';
   DateTime _date;
+  int _month;
+  int _day;
   TimeOfDay _time;
   num _reiteration = 1;
   String _reiterationTarget = 'MONTH';
@@ -18,6 +21,8 @@ class Task{
     this._title,
     this._date,
     this._time,
+    this._month,
+    this._day,
     this._reiteration,
     this._reiterationTarget,
     this._notification,
@@ -37,6 +42,12 @@ class Task{
   set time(TimeOfDay time) => this._time = time;
   TimeOfDay get time => this._time;
 
+  set month(int month) => this._month = month;
+  int get month => this._month;
+
+  set day(int day) => this._day = day;
+  int get day => this._day;
+
   set reiteration(num reiteration) => this._reiteration = reiteration;
   num get reiteration => this._reiteration;
 
@@ -55,6 +66,8 @@ class Task{
       'title': _title,
       'date': formatDate.format(_date),
       'time': '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}',
+      'month': _month,
+      'day': _day,
       'reiteration': _reiteration,
       'reiterationTarget': _reiterationTarget,
       'notification': _notification,
@@ -71,6 +84,8 @@ class Task{
     this._title = object['title'];
     this._date = formatDate.parse(object['date']);
     this._time = stringToTime(object['time']);
+    this._month = object['month'];
+    this._day = object['day'];
     this._reiteration = object['reiteration'];
     this._reiterationTarget = object['reiterationTarget'];
     this._notification = object['notification'];
@@ -83,5 +98,9 @@ class Task{
     int minutes = int.parse(splitedTime[1]);
 
     return TimeOfDay(hour: hours, minute: minutes);
+  }
+
+  String humanReadableDate(){
+    return '${_day.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_month)['name']}';
   }
 }

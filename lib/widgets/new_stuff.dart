@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../database/model.dart';
 import '../database/db_handler.dart';
+import './data_selector.dart';
+import '../util/months.dart' as mu;
 
 class NewStuffWidget extends StatefulWidget {
   final Task task;
@@ -18,7 +20,9 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
   final dbh = DatabaseHandler.internal();
   
 
-  DateTime _selectedDate;
+  DateTime _selectedDate = DateTime.now();
+  int _selectedMonth;
+  int _selectedDay;
   TimeOfDay _selectedTime;
   String _reiterationGroup;
   String _notificationGroup; 
@@ -31,10 +35,12 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
     _controller.text = widget.task.title;
     _reiterationGroup = widget.task.reiterationTarget;
     _notificationGroup = widget.task.notificationTarget;
-    _selectedDate = widget.task.date;
+    _selectedDate = DateTime.now();
     _selectedTime = widget.task.time;
     _reiterationCount = widget.task.reiteration;
     _notificationCount = widget.task.notification;
+    _selectedMonth = widget.task.month;
+    _selectedDay = widget.task.day;
   }
 
   _onReiterationRadioChanged(String value){
@@ -49,22 +55,22 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
     });
   }
 
-  void _selectDate(BuildContext context) async{
-    int firstYear = DateTime.now().year;
-    int finalYear = firstYear + 10;
-    final DateTime dt = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(firstYear),
-      lastDate: DateTime(finalYear)
-    );
+  // void _selectDate() async{
+  //   int firstYear = DateTime.now().year;
+  //   int finalYear = firstYear + 10;
+  //   final DateTime dt = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(firstYear),
+  //     lastDate: DateTime(finalYear)
+  //   );
 
-    if(dt != null){
-      setState(() {
-        _selectedDate = dt;      
-      });
-    }
-  }
+  //   if(dt != null){
+  //     setState(() {
+  //       _selectedDate = dt;      
+  //     });
+  //   }
+  // }
 
   void _selectTime(BuildContext context) async{
     final TimeOfDay tod = await showTimePicker(
@@ -99,10 +105,13 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
         _controller.text, 
         _selectedDate, 
         _selectedTime, 
+        _selectedMonth,
+        _selectedDay,
         _reiterationCount, 
         _reiterationGroup, 
         _notificationCount, 
         _notificationGroup);
+      print('task to save: ${task.toMap().toString()}');
       if(id == null)
         await dbh.create(task);
       else
@@ -113,12 +122,40 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
   }
 
   bool formIsValid(){
-    if(_controller.text.isEmpty || _selectedDate == null || _selectedTime == null){
+    if(_controller.text.isEmpty || _selectedMonth == null || _selectedDay == null || _selectedTime == null){
       displayDialog('Form Invalid!', 'Please make sure to fill all the requested data!');
       return false;
     }
 
     return true;
+  }
+
+  void displayDataSelectorDialog(){
+    var alert = AlertDialog(
+      // title: Text('Start date'),
+      contentPadding: EdgeInsets.only(top: 0.0),
+      content: Container(
+        width: MediaQuery.of(context).size.width * .9,
+        child: DateSelector(
+          selectedMonth: _selectedMonth,
+          selectedDay: _selectedDay,
+          onDateSelected: (Map month, int day){
+            print('${month.toString()}, $day');
+            setState(() {
+              _selectedMonth = month['number'];
+              _selectedDay = day;              
+            });
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => alert,
+      // barrierDismissible: false,
+    );
   }
 
   void displayDialog(title, String message){
@@ -179,11 +216,14 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               child: Center(
                 child: Text(
                   'What should I remind you with ?',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white
+                    color: Colors.white,
+                    
                   ),
+                  
                 ),
               ),
             ),
@@ -210,7 +250,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text(
-                    (_selectedDate == null) ? 'Select a Date' : this.formatDate.format(_selectedDate),
+                    (_selectedMonth == null && _selectedDay == null) ? 'Select a Date' : '${_selectedDay.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_selectedMonth)['name']}',
                     style: TextStyle(
                       fontSize: 30.0,
                       color: Colors.blueAccent
@@ -218,7 +258,8 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   ),
                 ),
                 onPressed: () {
-                  _selectDate(context);
+                  // _selectDate();
+                  displayDataSelectorDialog();
                 },
               ),
             )
@@ -230,7 +271,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'Reiteration',
+                  'Reiteration every',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -246,9 +287,6 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Every'),
-                ),
-                Expanded(
                   child: _reiterationNumberPicker
                 ),
                 Expanded(
@@ -259,8 +297,10 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                         groupValue: _reiterationGroup,
                         onChanged: _onReiterationRadioChanged,
                       ),
-                      Text(
-                        'Month',
+                      Expanded(
+                        child: Text(
+                          'Month',
+                        ),
                       ),
                     ],
                   ),
@@ -289,7 +329,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'When should I remind you ?',
+                  'Remind me before',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -304,9 +344,6 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             padding: EdgeInsets.all(20.0),
             child: Row(
               children: <Widget>[
-                Expanded(
-                  child: Text('Before'),
-                ),
                 Expanded(
                   child: _notificationNumberPicker
                 ),

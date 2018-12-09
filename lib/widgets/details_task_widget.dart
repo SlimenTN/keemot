@@ -35,7 +35,7 @@ class DetailTask extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('${formatDate.format(task.date)}', textAlign: TextAlign.left),
+              Text('Start date: ${task.humanReadableDate()}', textAlign: TextAlign.left),
               Text('Reiteration: Each ${task.reiteration} ${task.reiterationTarget}'),
               Text('Reminder: Before ${task.notification} ${task.notificationTarget}')
             ],

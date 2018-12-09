@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import '../util/months.dart' as mu;
 
 class DateSelector extends StatefulWidget {
-  Function onDateSelected;
-  DateSelector({Key key, @required this.onDateSelected}) : super(key: key);
-
+  final Function onDateSelected;
+  final int selectedMonth;
+  final int selectedDay;
+  DateSelector({Key key, @required this.onDateSelected, this.selectedMonth, this.selectedDay}) : super(key: key);
+  
   @override
   _DateSelectorState createState() => _DateSelectorState();
 }
@@ -13,20 +16,17 @@ class _DateSelectorState extends State<DateSelector> {
   Map _selectedMonth;
   int _selectedDay;
   bool _daysView = false;
-  final List months = <Map>[
-    {'name': 'January', 'number': 1, 'days': 31},
-    {'name': 'February', 'number': 2, 'days': 29},
-    {'name': 'March', 'number': 3, 'days': 31},
-    {'name': 'April', 'number': 4, 'days': 30},
-    {'name': 'May', 'number': 5, 'days': 31},
-    {'name': 'June', 'number': 6, 'days': 30},
-    {'name': 'July', 'number': 7, 'days': 31},
-    {'name': 'August', 'number': 8, 'days': 31},
-    {'name': 'Septembre', 'number': 9, 'days': 30},
-    {'name': 'Octobre', 'number': 10, 'days': 31},
-    {'name': 'Novembre', 'number': 11, 'days': 30},
-    {'name': 'December', 'number': 12, 'days': 31},
-  ];
+  final List months = mu.months;
+
+  @override
+  void initState(){
+    super.initState();
+    if(widget.selectedDay != null){
+      _selectedDay = widget.selectedDay;
+      _selectedMonth = mu.findMonthByNumber(widget.selectedMonth);
+      _daysView = true;
+    }
+  }
 
   //Build list of months Grid
   List<Widget> _buildMonthsGrid(){
@@ -39,7 +39,7 @@ class _DateSelectorState extends State<DateSelector> {
             margin: EdgeInsets.all(5.0),
             child: Center(
               child: Text(
-                month['name'],
+                month['abbreviation'],
                 style: TextStyle(
                   color: (_selectedMonth != null && _selectedMonth['number'] == month['number']) ? Colors.white : Colors.grey,
                 ),
@@ -73,9 +73,9 @@ class _DateSelectorState extends State<DateSelector> {
   Widget buildMonthsWidget(){
     return GridView.count(
       crossAxisCount: 3,
-      childAspectRatio: 2.5,
-      crossAxisSpacing: 15.0,
-      mainAxisSpacing: 15.0,
+      childAspectRatio: 1.5,
+      crossAxisSpacing: 5.0,
+      mainAxisSpacing: 5.0,
       children: _buildMonthsGrid(),
     );
   }
@@ -98,13 +98,13 @@ class _DateSelectorState extends State<DateSelector> {
             'BACK TO MONTHS',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20.0
+              fontSize: 15.0
             ),
           ),
         ),
         decoration: BoxDecoration(
           color: Colors.purple,
-          borderRadius: BorderRadius.circular(10.0)
+          // borderRadius: BorderRadius.circular(10.0)
         ),
       ),
       onTap: (){
@@ -127,6 +127,7 @@ class _DateSelectorState extends State<DateSelector> {
                 '$i',
                 style: TextStyle(
                   color: (_selectedDay != null && _selectedDay == i) ? Colors.white : Colors.grey,
+                  fontSize: 10.0
                 ),
               ),
             ),
@@ -163,9 +164,9 @@ class _DateSelectorState extends State<DateSelector> {
         Expanded(
             child: GridView.count(
             crossAxisCount: 7,
-            // childAspectRatio: 2.5,
-            // crossAxisSpacing: 15.0,
-            // mainAxisSpacing: 15.0,
+            childAspectRatio: 1.0,
+            crossAxisSpacing: 0.2,
+            mainAxisSpacing: 0.2,
             children: _buildDaysGrid(),
           ),
         ),
@@ -182,7 +183,9 @@ class _DateSelectorState extends State<DateSelector> {
   
   @override
   Widget build(BuildContext context) {
+    
     return Container(
+      height: 280.0,
       child: Center(
         child: (!_daysView) ? buildMonthsWidget() : buildDaysWidget(),
       ),

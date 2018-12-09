@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'dart:async';
 import 'model.dart';
 
 class DatabaseHandler{
@@ -14,6 +15,8 @@ class DatabaseHandler{
   final String _columnTite = 'title';
   final String _columnDate = 'date';
   final String _columnTime = 'time';
+  final String _columnMonth = 'month';
+  final String _columnDay = 'day';
   final String _columnReiteration = 'reiteration';
   final String _columnReiterationTarget = 'reiterationTarget';
   final String _columnNotification = 'notification';
@@ -31,7 +34,16 @@ class DatabaseHandler{
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, 'keemot.db');
 
-    var ourDB = await openDatabase(path, version: 1, onCreate: _onCreat);
+    var ourDB = await openDatabase(
+      path, 
+      version: 4, 
+      onCreate: _onCreat,
+      // onUpgrade: (Database db, int oldVersion, int newVersion)async {
+      //   await db.execute(
+      //     'DROP TABLE $_table'
+      //   );
+      // }
+      );
     return ourDB;
   }
 
@@ -42,6 +54,8 @@ class DatabaseHandler{
         '$_columnTite TEXT,'
         '$_columnDate TEXT,'
         '$_columnTime TEXT,'
+        '$_columnMonth INTEGER,'
+        '$_columnDay INTEGER,'
         '$_columnReiteration INTEGER,'
         '$_columnReiterationTarget TEXT,'
         '$_columnNotification INTEGER,'
@@ -58,7 +72,9 @@ class DatabaseHandler{
 
   // Create
   Future<int> create(Task task)async {
+    print('getting db');
     var dbClient = await db;
+    print('creating task: ${task.toMap().toString()}');
     int res = await dbClient.insert(_table, task.toMap());
     return res;
   }

@@ -11,7 +11,7 @@ class TestScreen extends StatelessWidget {
 
       body: Center(
         child: Container(
-          height: 400.0,
+          // height: 300.0,
           padding: EdgeInsets.all(50.0),
           child: DateSelector(
             onDateSelected: (Map month, int selectedDay){
