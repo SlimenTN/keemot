@@ -9,15 +9,12 @@ class ComingTask extends StatelessWidget {
   const ComingTask({Key key, @required this.task}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    DateFormat formatDate = DateFormat('dd/MM/yyyy');  
+  Widget build(BuildContext context) { 
     int remainingDays;
+    remainingDays = task.day - DateTime.now().day;
+    Color dangerColor = Colors.red;
+    Color warningColor = Colors.orange;
 
-    Duration diff = task.date.difference(DateTime.now());
-    // remainingDays = diff.inDays;
-    bool sameDay = (task.date.day == DateTime.now().day);
-    remainingDays = (sameDay) ? 0 : diff.inDays + 1;
-    print('remaining days: $remainingDays');
     Color borderColor = remainingDays <= 1 ? Colors.red : Colors.blueAccent;
     Color backgroundColor = remainingDays <= 1 ? Colors.red : Colors.white;
     Color avatarColor = remainingDays <= 1 ? Colors.white : Colors.blueGrey;
@@ -37,7 +34,7 @@ class ComingTask extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             child: Text(
-              '- $remainingDays',
+              (remainingDays == 0) ? '$remainingDays' : '- $remainingDays',
               style: TextStyle(
                 color: avatarTextColor
               ),
@@ -52,7 +49,7 @@ class ComingTask extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            "${formatDate.format(task.date)}",
+            "${task.humanReadableDate(DateTime.now().month)}",
             style: TextStyle(
               fontSize: 15.0,
               fontStyle: FontStyle.italic,

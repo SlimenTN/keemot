@@ -55,23 +55,6 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
     });
   }
 
-  // void _selectDate() async{
-  //   int firstYear = DateTime.now().year;
-  //   int finalYear = firstYear + 10;
-  //   final DateTime dt = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(firstYear),
-  //     lastDate: DateTime(finalYear)
-  //   );
-
-  //   if(dt != null){
-  //     setState(() {
-  //       _selectedDate = dt;      
-  //     });
-  //   }
-  // }
-
   void _selectTime(BuildContext context) async{
     final TimeOfDay tod = await showTimePicker(
       context: context,

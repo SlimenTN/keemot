@@ -100,7 +100,12 @@ class Task{
     return TimeOfDay(hour: hours, minute: minutes);
   }
 
-  String humanReadableDate(){
-    return '${_day.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_month)['name']}';
+  String humanReadableDate([int month]){
+    print('task: ${this._title}');
+    print('task month: ${this._month}');
+    print('function month: $month');
+    if(month == null) month = this._month;
+    print('function month after condition: $month');
+    return '${_day.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(month)['name']}';
   }
 }

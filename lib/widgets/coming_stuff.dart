@@ -71,7 +71,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
           taskWithinThisMonth(task) 
           && taskWithinThisWeek(task)
           ) _comingTasks.add(task);
-          
+
       }else if(task.reiterationTarget == 'YEAR') {
         if(
           taskWithinThisYear(task) 
@@ -80,6 +80,12 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
           ) _comingTasks.add(task);
       }
     });
+    // sort list to make sure that the closest tasks should be displayed on the top
+    _comingTasks.sort((task1, task2) {
+      int remainingDays1 = task1.day - DateTime.now().day;
+      int remainingDays2 = task2.day - DateTime.now().day;
+      return remainingDays1.compareTo(remainingDays2);
+    });
     setState(() {});
   }
 
@@ -87,25 +93,22 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
   // Equation: ((currentMonth + 12) - task.month) / task.reiteration)  ==> should be integer
   bool taskWithinThisMonth(Task task){
     int currentMonth = DateTime.now().month;
-    if(((currentMonth + 12) - task.month) % task.reiteration == 0) return true;
-    return false;
+    return (((currentMonth + 12) - task.month) % task.reiteration == 0);
   }
 
   // Check if task within this week (7 days)
   // Equation: task.day - currentDay ==> should be inferiour or equal to 7
   bool taskWithinThisWeek(Task task){
     int currentDay = DateTime.now().day;
-    int diff = currentDay - task.day;
-    if(diff>= 0 && diff <= numberOfDaysToDisplayComingStuff) return true;
-    return false;
+    int diff = task.day - currentDay;
+    return (diff>= 0 && diff <= numberOfDaysToDisplayComingStuff);
   }
 
   // Check if task within this year for tasks that has reiteration over years
   // Equation: (currentYear - task.date.year) / task.reiteration ==> should be integer
   bool taskWithinThisYear(Task task){
     int currentYear = DateTime.now().year;
-    if((currentYear - task.date.year) % task.reiteration == 0) return true;
-    return false;
+    return((currentYear - task.date.year) % task.reiteration == 0);
   }
 
   void _addNewStuff(BuildContext context) async{
