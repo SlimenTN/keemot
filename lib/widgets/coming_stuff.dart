@@ -22,27 +22,49 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
   FlutterLocalNotificationsPlugin notificationsPlugin;
 
   @override
-    void initState() {
-      super.initState();
-      _loadComingTasks();
+  void initState() {
+    super.initState();
+    _loadComingTasks();
 
-      // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project   
-      // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
-      var initAndroidSettings = AndroidInitializationSettings('app_icon');
-      var initIOSSettings = IOSInitializationSettings();
-      var initSettings = InitializationSettings(initAndroidSettings, initIOSSettings);
-      notificationsPlugin = FlutterLocalNotificationsPlugin();
-      notificationsPlugin.initialize(initSettings, onSelectNotification: onSelectNotification);
-    }
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project   
+    // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
+    var initAndroidSettings = AndroidInitializationSettings('app_icon');
+    var initIOSSettings = IOSInitializationSettings();
+    var initSettings = InitializationSettings(initAndroidSettings, initIOSSettings);
+    notificationsPlugin = FlutterLocalNotificationsPlugin();
+    notificationsPlugin.initialize(initSettings, onSelectNotification: onSelectNotification);
+    // schedualNotification();
+  }
+
+  Future schedualNotification(int seconds, int id) async{
+    var scheduledNotificationDateTime =
+        new DateTime.now().add(new Duration(seconds: seconds));
+    print('scheduling @ ${scheduledNotificationDateTime.toString()}');
+    var androidPlatformChannelSpecifics =
+        new AndroidNotificationDetails(
+          'your other channel id $id',
+          'your other channel name $id', 
+          'your other channel description $id');
+    var iOSPlatformChannelSpecifics =
+        new IOSNotificationDetails();
+    NotificationDetails platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await notificationsPlugin.schedule(
+        0,
+        'scheduled title n° $id',
+        'scheduled body',
+        scheduledNotificationDateTime,
+        platformChannelSpecifics);
+  }
 
   Future onSelectNotification(String payload) async{
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Here is your payload'),
-        content: Text('Payload: $payload'),
-      )
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => AlertDialog(
+    //     title: const Text('Here is your payload'),
+    //     content: Text('Payload: $payload'),
+    //   )
+    // );
   }
 
   Future _showNotificationWithDefaultSound()async{
@@ -219,7 +241,11 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
         child: Icon(Icons.add_alarm),
         backgroundColor: color.primary,
         onPressed: (){
-          _addNewStuff(context);
+          // _addNewStuff(context);
+          schedualNotification(10, 1);
+          schedualNotification(40, 2);
+          // print('${DateTime.now().millisecondsSinceEpoch}');
+          // _showNotificationWithDefaultSound();
         },
       ),
       body: Center(
