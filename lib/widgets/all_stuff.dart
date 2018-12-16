@@ -3,6 +3,7 @@ import '../database/model.dart';
 import './details_task_widget.dart';
 import '../database/db_handler.dart';
 import './new_stuff.dart';
+import '../util/colors.dart' as color;
 
 class AllStuffWidget extends StatefulWidget {
   @override
@@ -82,12 +83,14 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: color.secondary,
       appBar: AppBar(
         title: Text('List of repeated tasks'),
+        backgroundColor: color.primary,
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_alarm),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: color.primary,
         onPressed: (){
           _addNewStuff(context);
         },

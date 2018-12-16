@@ -7,6 +7,7 @@ import '../database/model.dart';
 import 'coming_task_widget.dart';
 import 'all_stuff.dart';
 import './test_screen.dart';
+import '../util/colors.dart' as color;
 
 class ComingStufWidget extends StatefulWidget {
   @override
@@ -142,7 +143,8 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
                 child: Text(
                   'You are free for the next 7 days',
                   style: TextStyle(
-                    fontSize: 30.0
+                    fontSize: 30.0,
+                    color: color.text,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -178,6 +180,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Keemot'),
+        backgroundColor: color.primary,
         actions: <Widget>[
           // FlatButton(
           //   child: Icon(Icons.refresh, color: Colors.white),
@@ -214,7 +217,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_alarm),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: color.primary,
         onPressed: (){
           _addNewStuff(context);
         },

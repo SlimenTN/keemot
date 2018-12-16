@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/model.dart';
+import '../util/colors.dart' as color;
 
 class DetailTask extends StatelessWidget {
   final Task task;
@@ -28,7 +29,11 @@ class DetailTask extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: ListTile(
         title: Text(
-          '${task.title}'
+          '${task.title}',
+          style: TextStyle(
+            color: color.text,
+            fontSize: 20.0
+          ),
         ),
         subtitle: Container(
           alignment: Alignment.centerLeft,
@@ -42,7 +47,10 @@ class DetailTask extends StatelessWidget {
           ),
         ),
         trailing: FlatButton(
-          child: Icon(Icons.delete_forever),
+          child: Icon(
+            Icons.delete_forever,
+            color: color.red,
+          ),
           onPressed: () {
             onDelete();
           },

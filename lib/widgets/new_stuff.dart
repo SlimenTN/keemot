@@ -5,6 +5,7 @@ import '../database/model.dart';
 import '../database/db_handler.dart';
 import './data_selector.dart';
 import '../util/months.dart' as mu;
+import '../util/colors.dart' as color;
 
 class NewStuffWidget extends StatefulWidget {
   final Task task;
@@ -173,10 +174,13 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
         maxValue: 11,
         step: 1,
         onChanged: _handleNotificationChange,
+        
     );
 
     return Scaffold(
+      backgroundColor: color.secondary,
       appBar: AppBar(
+        backgroundColor: color.primary,
         title: Text(
           (widget.task.id == null) ? 'New Stuff' : '${widget.task.title}'
         ),
@@ -193,7 +197,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
       body: ListView(
         children: <Widget>[
           Container(
-            color: Colors.teal,
+            // color: Colors.teal,
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Center(
@@ -203,7 +207,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: color.text,
                     
                   ),
                   
@@ -227,16 +231,19 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             child: Center(
               child: OutlineButton(                
                 borderSide: BorderSide(
-                  color: Colors.blueAccent,
+                  color: color.primary,
                 ),
-                color: Colors.blueAccent,
+                color: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0)
+                ),
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text(
                     (_selectedMonth == null && _selectedDay == null) ? 'Select a Date' : '${_selectedDay.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_selectedMonth)['name']}',
                     style: TextStyle(
                       fontSize: 30.0,
-                      color: Colors.blueAccent
+                      color: color.primary
                     ),
                   ),
                 ),
@@ -249,7 +256,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
           ),
 
           Container(
-            color: Colors.teal,
+            // color: Colors.teal,
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Center(
@@ -258,7 +265,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white
+                    color: color.text
                   ),
                 ),
               ),
@@ -307,7 +314,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
           ),
 
           Container(
-            color: Colors.teal,
+            // color: Colors.teal,
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Center(
@@ -316,7 +323,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white
+                    color: color.text
                   ),
                 ),
               ),
@@ -366,7 +373,10 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
           Center(
             child: OutlineButton(
               borderSide: BorderSide(
-                color: Colors.blueAccent,
+                color: color.primary,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50.0)
               ),
               child: Padding(
                 padding: EdgeInsets.all(15.0),
@@ -374,7 +384,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   (_selectedTime == null) ? 'Select a Time' : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontSize: 30.0,
-                    color: Colors.blueAccent
+                    color: color.primary
                   ),
                 ),
               ),
