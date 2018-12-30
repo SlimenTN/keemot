@@ -4,6 +4,7 @@ import './details_task_widget.dart';
 import '../database/db_handler.dart';
 import './new_stuff.dart';
 import '../util/colors.dart' as color;
+import '../util/dictionnary.dart' as dictionnary;
 
 class AllStuffWidget extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
     return Scaffold(
       backgroundColor: color.secondary,
       appBar: AppBar(
-        title: Text('List of repeated tasks'),
+        title: Text(dictionnary.translate('list.repeated.tasks')),
         backgroundColor: color.primary,
       ),
       floatingActionButton: FloatingActionButton(

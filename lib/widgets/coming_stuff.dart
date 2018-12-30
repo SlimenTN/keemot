@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:keemot/widgets/settings.dart';
 import 'new_stuff.dart';
 import '../database/db_handler.dart';
 import '../database/model.dart';
 import 'coming_task_widget.dart';
 import 'all_stuff.dart';
-import './test_screen.dart';
 import '../util/colors.dart' as color;
+import '../util/dictionnary.dart' as dictionnary;
+import '../database/settings_model.dart';
 
 class ComingStufWidget extends StatefulWidget {
   @override
@@ -19,68 +20,12 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
   final dbh = DatabaseHandler.internal();
   final List<Task> _comingTasks = <Task>[];
   final int numberOfDaysToDisplayComingStuff = 7;
-  FlutterLocalNotificationsPlugin notificationsPlugin;
+  String _selectedLang;
 
   @override
   void initState() {
     super.initState();
     _loadComingTasks();
-
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project   
-    // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
-    var initAndroidSettings = AndroidInitializationSettings('app_icon');
-    var initIOSSettings = IOSInitializationSettings();
-    var initSettings = InitializationSettings(initAndroidSettings, initIOSSettings);
-    notificationsPlugin = FlutterLocalNotificationsPlugin();
-    notificationsPlugin.initialize(initSettings, onSelectNotification: onSelectNotification);
-    // schedualNotification();
-  }
-
-  Future schedualNotification(int seconds, int id) async{
-    var scheduledNotificationDateTime =
-        new DateTime.now().add(new Duration(seconds: seconds));
-    print('scheduling @ ${scheduledNotificationDateTime.toString()}');
-    var androidPlatformChannelSpecifics =
-        new AndroidNotificationDetails(
-          'your other channel id $id',
-          'your other channel name $id', 
-          'your other channel description $id');
-    var iOSPlatformChannelSpecifics =
-        new IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await notificationsPlugin.schedule(
-        0,
-        'scheduled title n° $id',
-        'scheduled body',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics);
-  }
-
-  Future onSelectNotification(String payload) async{
-    // showDialog(
-    //   context: context,
-    //   builder: (_) => AlertDialog(
-    //     title: const Text('Here is your payload'),
-    //     content: Text('Payload: $payload'),
-    //   )
-    // );
-  }
-
-  Future _showNotificationWithDefaultSound()async{
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High);
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await notificationsPlugin.show(
-      1,
-      'New Post',
-      'How to Show Notification in Flutter',
-      platformChannelSpecifics,
-      payload: 'Default_Sound',
-    );
   }
 
   void _loadComingTasks() async{
@@ -153,6 +98,41 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
     _loadComingTasks();
   }
 
+
+
+  void _saveSettings() async{
+    Settings settings = await dbh.readSettings();
+    settings.lang = _selectedLang;
+    dbh.saveSettings(settings);
+    dictionnary.lang = _selectedLang;
+    setState(() {});
+  }
+
+  void _showSettings(){
+    var alert = AlertDialog(
+      title: Text('Settings'),
+      content: SettingsWidget(
+        selectedLang: dictionnary.lang,
+        onDataChanged: (lang) => _selectedLang = lang,
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(dictionnary.translate('save')),
+          onPressed: () {
+            _saveSettings();
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text(dictionnary.translate('cancel')),
+          onPressed: () => Navigator.pop(context),
+        )
+      ],
+    );
+
+    showDialog(context: context, builder: (BuildContext context) => alert);
+  }
+
   Widget _buildList(){
     if(_comingTasks.length == 0){
       return Expanded(
@@ -163,7 +143,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
               Padding(
                 padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                 child: Text(
-                  'You are free for the next 7 days',
+                  dictionnary.translate('no.stuff.to.do'),
                   style: TextStyle(
                     fontSize: 30.0,
                     color: color.text,
@@ -204,14 +184,10 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
         title: Text('Keemot'),
         backgroundColor: color.primary,
         actions: <Widget>[
-          // FlatButton(
-          //   child: Icon(Icons.refresh, color: Colors.white),
-          //   onPressed: _loadComingTasks,
-          // ),
-          // FlatButton(
-          //   child: Icon(Icons.notifications),
-          //   onPressed: _showNotificationWithDefaultSound,
-          // ),
+           FlatButton(
+             child: Icon(Icons.settings, color: Colors.white),
+             onPressed: _showSettings,
+           ),
           FlatButton(
             child: Icon(Icons.list, color: Colors.white),
             onPressed: (){
@@ -241,11 +217,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
         child: Icon(Icons.add_alarm),
         backgroundColor: color.primary,
         onPressed: (){
-          // _addNewStuff(context);
-          schedualNotification(10, 1);
-          schedualNotification(40, 2);
-          // print('${DateTime.now().millisecondsSinceEpoch}');
-          // _showNotificationWithDefaultSound();
+           _addNewStuff(context);
         },
       ),
       body: Center(
@@ -254,7 +226,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
             Padding(
               padding: EdgeInsets.all(20.0),
                 child: Text(
-                'COMING STUFF TO DO',
+                dictionnary.translate('coming.stuff'),
                 style: TextStyle(
                   fontSize: 25.0,
                   color: Colors.blueAccent

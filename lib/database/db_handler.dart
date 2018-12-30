@@ -4,12 +4,14 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'model.dart';
+import 'settings_model.dart';
 
 class DatabaseHandler{
   static final DatabaseHandler _instance = DatabaseHandler.internal();
   factory DatabaseHandler() => _instance;
   DatabaseHandler.internal();
 
+  // task table properties
   final String _table = 'task';
   final String _columnId = 'id';
   final String _columnTite = 'title';
@@ -21,6 +23,11 @@ class DatabaseHandler{
   final String _columnReiterationTarget = 'reiterationTarget';
   final String _columnNotification = 'notification';
   final String _columnNotificationTarget = 'notificationTarget';
+
+  // settings table properties
+  final String _settingsTable = 'settings';
+  final String _settingsColumnId = 'id';
+  final String _settingsColumnLang = 'lang';
 
   static Database _db;
 
@@ -36,18 +43,22 @@ class DatabaseHandler{
 
     var ourDB = await openDatabase(
       path, 
-      version: 4, 
+      version: 10,
       onCreate: _onCreat,
-      // onUpgrade: (Database db, int oldVersion, int newVersion)async {
-      //   await db.execute(
-      //     'DROP TABLE $_table'
-      //   );
-      // }
+      onUpgrade: _onUpgrade,
       );
     return ourDB;
   }
 
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async{
+    print('upgrading ... old: $oldVersion, new: $newVersion');
+    await db.execute("DROP TABLE IF EXISTS $_table");
+    await db.execute("DROP TABLE IF EXISTS $_settingsTable");
+    _onCreat(db, newVersion);
+  }
+
   void _onCreat(Database db, int version) async{
+    print ('creating ... version => $version');
     await db.execute(
       'CREATE TABLE $_table ('
         '$_columnId INTEGER PRIMARY KEY,'
@@ -62,6 +73,37 @@ class DatabaseHandler{
         '$_columnNotificationTarget TEXT'
       ')'
     );
+
+    await db.execute(
+        'CREATE TABLE $_settingsTable ('
+          '$_settingsColumnId INTEGER PRIMARY KEY,'
+          '$_settingsColumnLang VARCHAR (3)'
+        ')'
+    );
+  }
+
+  // read saved settings from database
+  Future<Settings> readSettings() async{
+    var dbClient = await db;
+    var res = await dbClient.rawQuery('SELECT * FROM $_settingsTable');
+    var data = res.toList();
+    if(data.length == 0)
+      return Settings.empty();
+    else
+      return Settings.Map(res.toList()[0]);
+  }
+
+  void saveSettings(Settings settings) async{
+    var dbClient = await db;
+    if(settings.id == null)
+      await dbClient.insert(_settingsTable, settings.toMap());
+    else
+      await dbClient.update(
+          _settingsTable,
+          settings.toMap(),
+          where: '$_settingsColumnId = ?',
+          whereArgs: [settings.id]
+      );
   }
 
   // close connection

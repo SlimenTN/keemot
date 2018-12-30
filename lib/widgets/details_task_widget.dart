@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/model.dart';
 import '../util/colors.dart' as color;
+import '../util/dictionnary.dart' as dictionnary;
 
 class DetailTask extends StatelessWidget {
   final Task task;
@@ -15,7 +16,7 @@ class DetailTask extends StatelessWidget {
     final scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
       SnackBar(
-        content: const Text('Long press to edit the task'),
+        content: Text(dictionnary.translate('long.press.to.edit.this.task')),
       ),
     );
   }
@@ -40,9 +41,9 @@ class DetailTask extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Start date: ${task.humanReadableDate()}', textAlign: TextAlign.left),
-              Text('Reiteration: Each ${task.reiteration} ${task.reiterationTarget}'),
-              Text('Reminder: Before ${task.notification} ${task.notificationTarget}')
+              Text('${dictionnary.translate('start.date')}: ${task.humanReadableDate()}', textAlign: TextAlign.left),
+              Text('${dictionnary.translate('reiteration.each')} ${task.reiteration} ${dictionnary.translate(task.reiterationTarget)}'),
+              Text('${dictionnary.translate('reminder.before')} ${task.notification} ${dictionnary.translate(task.notificationTarget)}')
             ],
           ),
         ),

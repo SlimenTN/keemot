@@ -6,6 +6,7 @@ import '../database/db_handler.dart';
 import './data_selector.dart';
 import '../util/months.dart' as mu;
 import '../util/colors.dart' as color;
+import '../util/dictionnary.dart' as dictionnary;
 
 class NewStuffWidget extends StatefulWidget {
   final Task task;
@@ -107,7 +108,10 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
   bool formIsValid(){
     if(_controller.text.isEmpty || _selectedMonth == null || _selectedDay == null || _selectedTime == null){
-      displayDialog('Form Invalid!', 'Please make sure to fill all the requested data!');
+      displayDialog(
+          dictionnary.translate('form.invalid.title'),
+          dictionnary.translate('form.invalid.description')
+      );
       return false;
     }
 
@@ -182,7 +186,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
       appBar: AppBar(
         backgroundColor: color.primary,
         title: Text(
-          (widget.task.id == null) ? 'New Stuff' : '${widget.task.title}'
+          (widget.task.id == null) ? dictionnary.translate('new.stuff') : '${widget.task.title}'
         ),
         actions: <Widget>[
           FlatButton(
@@ -202,7 +206,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'What should I remind you with ?',
+                  dictionnary.translate('what.should.I.remind.you.with'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -221,7 +225,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'ex: Pay some bills', 
+                hintText: dictionnary.translate('ex.pay.some.bills'), 
               ),
             ),
           ),
@@ -240,7 +244,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text(
-                    (_selectedMonth == null && _selectedDay == null) ? 'Select a Date' : '${_selectedDay.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_selectedMonth)['name']}',
+                    (_selectedMonth == null && _selectedDay == null) ? dictionnary.translate('select.date') : '${_selectedDay.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_selectedMonth)['name']}',
                     style: TextStyle(
                       fontSize: 30.0,
                       color: color.primary
@@ -261,7 +265,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'Reiteration every',
+                  dictionnary.translate('reiteration.every'),
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -289,7 +293,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                       ),
                       Expanded(
                         child: Text(
-                          'Month',
+                          dictionnary.translate('MONTH'),
                         ),
                       ),
                     ],
@@ -304,7 +308,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                         onChanged: _onReiterationRadioChanged,
                       ),
                       Text(
-                        'Year',
+                        dictionnary.translate('YEAR'),
                       ),
                     ],
                   ),
@@ -319,7 +323,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'Remind me before',
+                  dictionnary.translate('remind.me.before'),
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -346,7 +350,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                         onChanged: _onNotificationRadioChanged,
                       ),
                       Text(
-                        'Day',
+                        dictionnary.translate('DAY'),
                         
                       ),
                     ],
@@ -361,7 +365,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                         onChanged: _onNotificationRadioChanged,
                       ),
                       Text(
-                        'Week',
+                        dictionnary.translate('WEEK'),
                       ),
                     ],
                   ),
@@ -381,7 +385,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
               child: Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Text(
-                  (_selectedTime == null) ? 'Select a Time' : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
+                  (_selectedTime == null) ? dictionnary.translate('select.time') : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontSize: 30.0,
                     color: color.primary
