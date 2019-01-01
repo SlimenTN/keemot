@@ -1,6 +1,6 @@
 # keemot
 
-A flutter app to kep you on track of repetitive events or tasks
+A flutter app to track the repetitive tasks or events
 
 ## Screenshots 
 
