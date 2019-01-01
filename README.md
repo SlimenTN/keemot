@@ -1,8 +1,9 @@
 # keemot
 
-A new Flutter project.
+A flutter app to kep you on track of repetitive events or tasks
 
-## Getting Started
+## Screenshots 
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+<img align="left" src="./documentation/images/A.jpg" hspace="20"/>
+<img align="left" src="./documentation/images/B.png" hspace="20"/>
+<img align="left" src="./documentation/images/C.png" hspace="20"/>

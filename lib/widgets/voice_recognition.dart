@@ -25,7 +25,8 @@ class _VoiceRecognitionState extends State<VoiceRecognition> {
   void initState() {
     super.initState();
     _initSpeechRecognition();
-    Timer(const Duration(milliseconds: 400), () {
+    Timer(const Duration(milliseconds: 1000), () {
+      print('starting now.');
       _startRecording();
     });
   }
