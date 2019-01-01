@@ -109,6 +109,26 @@ const book = {
       "Please make sure to fill all the requested data.",
       "S'il vous plaît assurez-vous de remplir toutes les données demandées."
     ],
+    "settings": <String>[
+      "Settings",
+      "Paramèters"
+    ],
+    "yes": <String>[
+      "Yes",
+      "Oui"
+    ],
+    "delete.task": <String>[
+      "Delete task",
+      "Supprimer tâche"
+    ],
+    "delete.message": <String>[
+      "Are you sure you want to delete this task ?",
+      "Êtes-vous sûr de vouloir supprimer cette tâche?"
+    ],
+    "say.something": <String>[
+      "Say something",
+      "Dit quelque chose"
+    ],
 };
 
 String lang;

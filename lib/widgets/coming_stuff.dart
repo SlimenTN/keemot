@@ -110,7 +110,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
 
   void _showSettings(){
     var alert = AlertDialog(
-      title: Text('Settings'),
+      title: Text(dictionnary.translate('settings')),
       content: SettingsWidget(
         selectedLang: dictionnary.lang,
         onDataChanged: (lang) => _selectedLang = lang,
@@ -135,43 +135,55 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
 
   Widget _buildList(){
     if(_comingTasks.length == 0){
-      return Expanded(
-        child: Center(
+      return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Container(
+                // padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
+                width: 150.0,
+                height: 150.0,
+                child: Image.asset('images/empty.png'),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
+              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                 child: Text(
                   dictionnary.translate('no.stuff.to.do'),
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 20.0,
                     color: color.text,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
-              ),
-              Container(
-                // padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 70.0),
-                width: 200.0,
-                height: 200.0,
-                child: Image.asset('images/freedom.png'),
-              )
             ],
           )
-        ),
       );
     }else{
-      return Flexible(
-        child: ListView.builder(
-          itemCount: _comingTasks.length,
-          itemBuilder: (_, int index){
-            return ComingTask(task: _comingTasks[index]);            
-          },
-        ),
+      return Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              dictionnary.translate('coming.stuff'),
+              style: TextStyle(
+                  fontSize: 25.0,
+                  color: Colors.blueAccent
+              ),
+            ),
+          ),
+          Flexible(
+            child: ListView.builder(
+              itemCount: _comingTasks.length,
+              itemBuilder: (_, int index){
+                return ComingTask(task: _comingTasks[index]);
+              },
+            ),
+          )
+        ],
       );
     }
   }
@@ -221,22 +233,7 @@ class _ComingStufWidgetState extends State<ComingStufWidget> {
         },
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20.0),
-                child: Text(
-                dictionnary.translate('coming.stuff'),
-                style: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.blueAccent
-                ),
-              ),
-            ),
-
-            _buildList()
-          ],
-        ),
+        child: _buildList(),
       ),
     );
   }

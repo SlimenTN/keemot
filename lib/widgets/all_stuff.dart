@@ -41,15 +41,15 @@ class _AllStuffWidgetState extends State<AllStuffWidget> {
 
   void _confirmDelete(int id){
     var alert = AlertDialog(
-      title: Text('Delete Task'),
-      content: Text('Are you sure you want to delete this task ?'),
+      title: Text(dictionnary.translate('delete.task')),
+      content: Text(dictionnary.translate('delete.message')),
       actions: <Widget>[
         FlatButton(
-          child: Text('Cancel'),
+          child: Text(dictionnary.translate('cancel')),
           onPressed: () => Navigator.pop(context),
         ),
         FlatButton(
-          child: Text('Yes'),
+          child: Text(dictionnary.translate('yes')),
           onPressed: () {
             Navigator.pop(context);
             _deleteTask(id);

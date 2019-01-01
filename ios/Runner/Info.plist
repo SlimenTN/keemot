@@ -27,6 +27,10 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>This application needs to access your microphone</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>This application needs the speech recognition permission</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

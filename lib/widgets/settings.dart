@@ -43,9 +43,7 @@ class _SettingsState extends State<SettingsWidget> {
                       onChanged: _onLanguageChanged,
                     ),
                     Expanded(
-                      child: Text(
-                        dictionnary.translate('english'),
-                      ),
+                      child: Text('EN'),
                     ),
                   ],
                 ),
@@ -58,9 +56,7 @@ class _SettingsState extends State<SettingsWidget> {
                       groupValue: _selectedLang,
                       onChanged: _onLanguageChanged,
                     ),
-                    Text(
-                      dictionnary.translate('french'),
-                    ),
+                    Text('FR'),
                   ],
                 ),
               ),

@@ -7,6 +7,7 @@ import './data_selector.dart';
 import '../util/months.dart' as mu;
 import '../util/colors.dart' as color;
 import '../util/dictionnary.dart' as dictionnary;
+import 'voice_recognition.dart';
 
 class NewStuffWidget extends StatefulWidget {
   final Task task;
@@ -121,8 +122,11 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
   void displayDataSelectorDialog(){
     var alert = AlertDialog(
       // title: Text('Start date'),
-      contentPadding: EdgeInsets.only(top: 0.0),
+      contentPadding: EdgeInsets.all(5.0),
       content: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))
+        ),
         width: MediaQuery.of(context).size.width * .9,
         child: DateSelector(
           selectedMonth: _selectedMonth,
@@ -160,6 +164,20 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
+  void _showRecordVoiceDialog(){
+    var alert = AlertDialog(
+      content: VoiceRecognition(
+        onSave: (text){
+          setState(() {_controller.text = text;});
+          Navigator.pop(context);
+        },
+        onCancel: () => Navigator.pop(context),
+      ),
+    );
+
+    showDialog(context: context, builder: (BuildContext context) => alert, barrierDismissible: false);
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -222,11 +240,27 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
 
           Padding(
             padding: EdgeInsets.all(20.0),
-            child: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                hintText: dictionnary.translate('ex.pay.some.bills'), 
-              ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: dictionnary.translate('ex.pay.some.bills'),
+                      ),
+                    ),
+                  ),
+                ),
+                FloatingActionButton(
+                  child: Icon(Icons.mic),
+                  backgroundColor: color.primary,
+                  onPressed: (){
+                    _showRecordVoiceDialog();
+                  },
+                )
+              ],
             ),
           ),
 
@@ -246,7 +280,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                   child: Text(
                     (_selectedMonth == null && _selectedDay == null) ? dictionnary.translate('select.date') : '${_selectedDay.toString().padLeft(2, '0')}, ${mu.findMonthByNumber(_selectedMonth)['name']}',
                     style: TextStyle(
-                      fontSize: 30.0,
+                      fontSize: 20.0,
                       color: color.primary
                     ),
                   ),
@@ -387,7 +421,7 @@ class _NewStuffWidgetState extends State<NewStuffWidget> {
                 child: Text(
                   (_selectedTime == null) ? dictionnary.translate('select.time') : '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 20.0,
                     color: color.primary
                   ),
                 ),

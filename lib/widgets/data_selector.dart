@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../util/months.dart' as mu;
+import '../util/colors.dart' as colors;
 
 class DateSelector extends StatefulWidget {
   final Function onDateSelected;
@@ -47,7 +48,7 @@ class _DateSelectorState extends State<DateSelector> {
             ),
             
             decoration: BoxDecoration(
-              color: (_selectedMonth != null && _selectedMonth['number'] == month['number']) ? Colors.purple : Colors.white,
+              color: (_selectedMonth != null && _selectedMonth['number'] == month['number']) ? colors.primary : Colors.white,
               borderRadius: BorderRadius.circular(30.0),
               boxShadow: <BoxShadow>[
                 BoxShadow(
@@ -103,7 +104,7 @@ class _DateSelectorState extends State<DateSelector> {
           ),
         ),
         decoration: BoxDecoration(
-          color: Colors.purple,
+          color: colors.primary,
           // borderRadius: BorderRadius.circular(10.0)
         ),
       ),
@@ -133,7 +134,7 @@ class _DateSelectorState extends State<DateSelector> {
             ),
             
             decoration: BoxDecoration(
-              color: (_selectedDay != null && _selectedDay == i) ? Colors.purple : Colors.white,
+              color: (_selectedDay != null && _selectedDay == i) ? colors.primary : Colors.white,
               borderRadius: BorderRadius.circular(20.0),
               boxShadow: <BoxShadow>[
                 BoxShadow(
@@ -185,7 +186,8 @@ class _DateSelectorState extends State<DateSelector> {
   Widget build(BuildContext context) {
     
     return Container(
-      height: 280.0,
+      alignment: Alignment.center,
+      height: 310.0,
       child: Center(
         child: (!_daysView) ? buildMonthsWidget() : buildDaysWidget(),
       ),

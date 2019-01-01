@@ -24,6 +24,8 @@ dependencies:
   numberpicker: ^0.1.7
   sqflite: ^0.12.2+1
   flutter_local_notifications: ^0.4.2
+  speech_recognition: "^0.3.0"
+  permission: ^0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +47,7 @@ flutter:
   assets:
    - images/city.jpg
    - images/freedom.png
+   - images/empty.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
