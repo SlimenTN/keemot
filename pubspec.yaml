@@ -10,7 +10,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,7 +23,7 @@ dependencies:
   intl: "^0.15.4"
   numberpicker: ^0.1.7
   sqflite: ^0.12.2+1
-  flutter_local_notifications: ^0.4.2
+  flutter_local_notifications: ^0.8.4+3
   speech_recognition: "^0.3.0"
   permission: ^0.1.0
 
